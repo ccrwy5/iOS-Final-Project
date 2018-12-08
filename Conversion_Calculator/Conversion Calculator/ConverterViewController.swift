@@ -154,7 +154,8 @@ class ConverterViewController: UIViewController {
 
 
     //////////////////////
-    //old stuff that i couldn't work while testing but saving for reference
+    //old stuff that i couldn't work while testing but saving for reference. Mainly used when referencing the actionsheet/math functionality
+
 
 //
 //    @IBAction func numbers(_ sender: UIButton) {
