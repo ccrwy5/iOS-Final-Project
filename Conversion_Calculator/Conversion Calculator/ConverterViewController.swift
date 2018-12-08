@@ -14,6 +14,9 @@ class ConverterViewController: UIViewController {
     @IBOutlet weak var outputDisplay: UITextField!
     @IBOutlet weak var inputDisplay: UITextField!
     
+    
+    // From UI building challenge
+    
     struct Converter {
         let label: ConverterType
 
@@ -42,6 +45,7 @@ class ConverterViewController: UIViewController {
                           Converter(label: ConverterType.kilometersToMiles, inputUnit: "km", outputUnit: "mi")]
     let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
     
+    // end from UI build challenge
     
     //globals
     var enteredNumber: String = ""
@@ -63,6 +67,8 @@ class ConverterViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    //new stuff
     
     // enters numbers 0-9
     @IBAction func numberButtons(_ sender: UIButton) {
