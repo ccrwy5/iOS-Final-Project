@@ -14,14 +14,6 @@ class ConverterViewController: UIViewController {
     @IBOutlet weak var outputDisplay: UITextField!
     @IBOutlet weak var inputDisplay: UITextField!
     
-    
-    //globals
-    var enteredNumber: String = ""
-    var negativeNumber = false
-    var decimal = false
-    
-    
-    
     struct Converter {
         let label: ConverterType
 
@@ -50,15 +42,19 @@ class ConverterViewController: UIViewController {
                           Converter(label: ConverterType.kilometersToMiles, inputUnit: "km", outputUnit: "mi")]
     let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertController.Style.actionSheet)
     
+    
+    //globals
+    var enteredNumber: String = ""
+    var negativeNumber = false
+    var decimal = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         for converter in converterArray {
-            actionSheet.addAction(UIAlertAction(title: converter.label.rawValue, style: .default, handler: { (_) in
-                self.option = converter
-                
-                self.convert()
-            }))
+            actionSheet.addAction(UIAlertAction(title: converter.label.rawValue, style: .default, handler: { (_) in self.option = converter
+                self.conversion() }
+            ))
         }
     }
     
@@ -71,13 +67,16 @@ class ConverterViewController: UIViewController {
     // enters numbers 0-9
     @IBAction func numberButtons(_ sender: UIButton) {
         enteredNumber += String(sender.tag)
-        convert()
+        conversion()
     }
     
     
     // pulls up action sheet
     @IBAction func converterButton(_ sender: Any) {
-        self.present(actionSheet, animated: true, completion: nil)
+        self.present(actionSheet, animated: true, completion: {
+            print("Test, Converter Button Pressed")
+            
+        })
         outputDisplay.text = option.outputUnit
         inputDisplay.text = option.inputUnit
     }
@@ -86,12 +85,9 @@ class ConverterViewController: UIViewController {
     // clears text fields
     @IBAction func clearButton(_ sender: Any) {
         
-        //        outputDisplay.text = ""
-        //        inputDisplay.text = ""
-        
-        outputDisplay.text = option.outputUnit
-        enteredNumber = ""
-        inputDisplay.text = option.inputUnit
+                outputDisplay.text = ""
+                inputDisplay.text = ""
+                enteredNumber = ""
     }
     
     
@@ -107,7 +103,7 @@ class ConverterViewController: UIViewController {
                 
                 negativeNumber = false
             }
-            convert()
+            conversion()
         }
     }
     
@@ -122,33 +118,33 @@ class ConverterViewController: UIViewController {
             else{
                 
                 enteredNumber += "."
-                
                 decimal = true
-                convert()
+                
+                conversion()
+                
                 decimal = false
             }
         }
     }
     
-    
-    func convert() {
+    // handles actual conversion / math 
+    func conversion() {
         inputDisplay.text = enteredNumber + option.inputUnit
         outputDisplay.text = option.outputUnit
         
-        guard let preConvert = Double(enteredNumber)
+        guard let preConvert = Float(enteredNumber)
             else {
                 
                 return
         }
-        var postConvert: Double? = nil
+        var postConvert: Float? = nil
         
         switch option.label {
             
-            case .fahrenheitToCelsius: postConvert = (preConvert - 32) * 5/9
-            case .celsiusToFahrenheit: postConvert = (preConvert * 9/5) + 32
+            case .fahrenheitToCelsius: postConvert = (preConvert - 32) * (5/9)
+            case .celsiusToFahrenheit: postConvert = (preConvert * (9/5) ) + 32
             case .milesToKilometers: postConvert = (preConvert / 0.62137)
             case .kilometersToMiles: postConvert = (preConvert * 0.62137)
-            
         }
         
         outputDisplay.text = String(postConvert!) + option.outputUnit
