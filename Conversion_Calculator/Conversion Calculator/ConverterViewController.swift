@@ -10,19 +10,28 @@ import UIKit
 
 class ConverterViewController: UIViewController {
     
+    //outlets
     @IBOutlet weak var outputDisplay: UITextField!
     @IBOutlet weak var inputDisplay: UITextField!
     
+    
+    //globals
     var enteredNumber: String = ""
     var negativeNumber = false
     var decimal = false
     
+    
+    
     struct Converter {
-        let label:ConverterType
-        let inputUnit:String
-        let outputUnit:String
+        let label: ConverterType
+
+        let inputUnit: String
+        let outputUnit: String
+
     }
 
+    
+    //make strings
     enum ConverterType: String {
         case fahrenheitToCelsius = "Fahrenheit to Celsius"
         case celsiusToFahrenheit = "Celsius to Fahrenheit"
@@ -31,6 +40,8 @@ class ConverterViewController: UIViewController {
     }
     
     
+    
+    //action sheet
     var option: Converter = Converter(label: ConverterType.fahrenheitToCelsius, inputUnit: "°F", outputUnit: "°C")
     
     let converterArray = [Converter(label: ConverterType.fahrenheitToCelsius, inputUnit: "°F", outputUnit: "°C"),
@@ -45,6 +56,7 @@ class ConverterViewController: UIViewController {
         for converter in converterArray {
             actionSheet.addAction(UIAlertAction(title: converter.label.rawValue, style: .default, handler: { (_) in
                 self.option = converter
+                
                 self.convert()
             }))
         }
@@ -55,17 +67,23 @@ class ConverterViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    // enters numbers 0-9
     @IBAction func numberButtons(_ sender: UIButton) {
         enteredNumber += String(sender.tag)
         convert()
     }
     
+    
+    // pulls up action sheet
     @IBAction func converterButton(_ sender: Any) {
         self.present(actionSheet, animated: true, completion: nil)
         outputDisplay.text = option.outputUnit
         inputDisplay.text = option.inputUnit
     }
     
+    
+    // clears text fields
     @IBAction func clearButton(_ sender: Any) {
         
         //        outputDisplay.text = ""
@@ -76,54 +94,60 @@ class ConverterViewController: UIViewController {
         inputDisplay.text = option.inputUnit
     }
     
+    
+    // makes input number negative
     @IBAction func positiveNegativeButton(_ sender: Any) {
         if !enteredNumber.isEmpty {
+            
             if !negativeNumber{
+                
                 negativeNumber = true
                 enteredNumber = "-" + enteredNumber
-            }else {
+            } else {
+                
                 negativeNumber = false
             }
             convert()
         }
     }
     
+    //adds deciaml
     @IBAction func decimalButton(_ sender: Any) {
-        if !enteredNumber.contains("."){
+        if !enteredNumber.contains("."){                //only 1 decimal can be added
         
             if decimal {
                 
                 return
             }
             else{
+                
                 enteredNumber += "."
                 
                 decimal = true
                 convert()
                 decimal = false
             }
+        }
     }
-}
+    
+    
     func convert() {
         inputDisplay.text = enteredNumber + option.inputUnit
         outputDisplay.text = option.outputUnit
         
         guard let preConvert = Double(enteredNumber)
             else {
+                
                 return
         }
         var postConvert: Double? = nil
         
         switch option.label {
             
-            case .fahrenheitToCelsius:
-                postConvert = (preConvert - 32) * 5/9
-            case .celsiusToFahrenheit:
-                postConvert = (preConvert * 9/5) + 32
-            case .milesToKilometers:
-                postConvert = (preConvert / 0.62137)
-            case .kilometersToMiles:
-                postConvert = (preConvert * 0.62137)
+            case .fahrenheitToCelsius: postConvert = (preConvert - 32) * 5/9
+            case .celsiusToFahrenheit: postConvert = (preConvert * 9/5) + 32
+            case .milesToKilometers: postConvert = (preConvert / 0.62137)
+            case .kilometersToMiles: postConvert = (preConvert * 0.62137)
             
         }
         
