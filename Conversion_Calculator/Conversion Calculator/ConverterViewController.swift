@@ -47,10 +47,8 @@ class ConverterViewController: UIViewController {
     
     // end from UI build challenge
     
-    //globals
+    
     var enteredNumber: String = ""
-    var negativeNumber = false
-    var decimal = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,30 +97,26 @@ class ConverterViewController: UIViewController {
     
     // makes input number negative
     @IBAction func positiveNegativeButton(_ sender: Any) {
-        if !enteredNumber.isEmpty {
+        var negativeNumber = false
+
+        if enteredNumber != "" {
             
             if !negativeNumber{
                 
                 negativeNumber = true
                 enteredNumber = "-" + enteredNumber
-            } else {
-                
-                negativeNumber = false
             }
+
             conversion()
         }
     }
     
     //adds deciaml
+    var decimal = false
+
     @IBAction func decimalButton(_ sender: Any) {
-        if !enteredNumber.contains("."){                //only 1 decimal can be added
+                if !enteredNumber.contains("."){
         
-            if decimal {
-                
-                return
-            }
-            else{
-                
                 enteredNumber += "."
                 decimal = true
                 
@@ -131,28 +125,27 @@ class ConverterViewController: UIViewController {
                 decimal = false
             }
         }
-    }
+    
     
     // handles actual conversion / math 
     func conversion() {
-        inputDisplay.text = enteredNumber + option.inputUnit
-        outputDisplay.text = option.outputUnit
         
         guard let preConvert = Float(enteredNumber)
             else {
-                
                 return
         }
+        
+        
         var postConvert: Float? = nil
         
         switch option.label {
-            
             case .fahrenheitToCelsius: postConvert = (preConvert - 32) * (5/9)
             case .celsiusToFahrenheit: postConvert = (preConvert * (9/5) ) + 32
             case .milesToKilometers: postConvert = (preConvert / 0.62137)
             case .kilometersToMiles: postConvert = (preConvert * 0.62137)
         }
         
+        inputDisplay.text = enteredNumber + option.inputUnit
         outputDisplay.text = String(postConvert!) + option.outputUnit
         }
         
@@ -161,8 +154,7 @@ class ConverterViewController: UIViewController {
 
 
     //////////////////////
-    
-
+    //old stuff that i couldn't work while testing but saving for reference
 
 //
 //    @IBAction func numbers(_ sender: UIButton) {
